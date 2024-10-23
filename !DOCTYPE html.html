@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Obtener ubicación con consentimiento</title>
+    <script>
+        function obtenerUbicacion() {
+            if (navigator.geolocation) {
+                // Solicitar la ubicación del usuario
+                navigator.geolocation.getCurrentPosition(mostrarUbicacion, manejarError);
+            } else {
+                document.getElementById("ubicacion").innerHTML = "La geolocalización no es compatible con este navegador.";
+            }
+        }
+
+        function mostrarUbicacion(position) {
+            var lat = position.coords.latitude;
+            var lon = position.coords.longitude;
+            document.getElementById("ubicacion").innerHTML = "Latitud: " + lat + ", Longitud: " + lon;
+
+            // Aquí puedes enviar la ubicación a tu servidor si es necesario
+            // Ejemplo de solicitud para enviar datos
+            // fetch('https://tu-servidor.com/guardar-ubicacion', {
+            //     method: 'POST',
+            //     body: JSON.stringify({ latitud: lat, longitud: lon }),
+            //     headers: {
+            //         'Content-Type': 'application/json'
+            //     }
+            // });
+        }
+
+        function manejarError(error) {
+            switch (error.code) {
+                case error.PERMISSION_DENIED:
+                    document.getElementById("ubicacion").innerHTML = "El usuario denegó el acceso a la ubicación.";
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    document.getElementById("ubicacion").innerHTML = "La información de ubicación no está disponible.";
+                    break;
+                case error.TIMEOUT:
+                    document.getElementById("ubicacion").innerHTML = "La solicitud para obtener la ubicación ha caducado.";
+                    break;
+                case error.UNKNOWN_ERROR:
+                    document.getElementById("ubicacion").innerHTML = "Ocurrió un error desconocido.";
+                    break;
+            }
+        }
+
+        // Ejecutar la función obtenerUbicacion al cargar la página
+        window.onload = obtenerUbicacion;
+    </script>
+</head>
+<body>
+    <h1>Obtener ubicación con consentimiento</h1>
+    <p id="ubicacion">Solicitando ubicación...</p>
+</body>
+</html>
